@@ -28,7 +28,7 @@ class SendEmail:
         @param content: 发送内容
         @return:
         """
-        user = "余少琪" + "<" + config.email.send_user + ">"
+        user = "黄宇" + "<" + config.email.send_user + ">"
         message = MIMEText(content, _subtype='plain', _charset='utf-8')
         message['Subject'] = sub
         message['From'] = user

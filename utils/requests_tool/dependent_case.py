@@ -122,7 +122,7 @@ class DependentCase:
                     _replace_key = self.replace_key(i)
                     if _set_value is not None:
                         CacheHandler.update_cache(cache_name=_set_value, value=jsonpath_data[0])
-                        # Cache(_set_value).set_caches(jsonpath_data[0])
+                        # cache(_set_value).set_caches(jsonpath_data[0])
                     if _replace_key is not None:
                         jsonpath_dates[_replace_key] = jsonpath_data[0]
                         self.url_replace(

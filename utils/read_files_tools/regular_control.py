@@ -157,7 +157,7 @@ def cache_regular(value):
                 r'\$cache\{' + regular_data.replace('$', "\$").replace('[', '\[') + r'\}'
             )
         try:
-            # cache_data = Cache(regular_data).get_cache()
+            # cache = cache(regular_data).get_cache()
             cache_data = CacheHandler.get_cache(regular_data)
             # 使用sub方法，替换已经拿到的内容
             value = re.sub(pattern, str(cache_data), value)

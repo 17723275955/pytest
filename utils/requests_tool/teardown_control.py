@@ -63,7 +63,7 @@ class TearDownHandler:
             old_value = replace_key[start_index:end_index + 2]
             cache_name = old_value[11:old_value.index("}")]
             CacheHandler.update_cache(cache_name=cache_name, value=resp_case_data)
-            # Cache(cache_name).set_caches(resp_case_data)
+            # cache(cache_name).set_caches(resp_case_data)
 
     @classmethod
     def regular_testcase(cls, teardown_case: Dict) -> Dict:
@@ -167,7 +167,7 @@ class TearDownHandler:
             if _response_dependent is not False:
                 _resp_case_data = _response_dependent[0]
                 # 拿到 set_cache 然后将数据写入缓存
-                # Cache(_set_value).set_caches(_resp_case_data)
+                # cache(_set_value).set_caches(_resp_case_data)
                 CacheHandler.update_cache(cache_name=_set_value, value=_resp_case_data)
                 self.get_cache_name(
                     replace_key=_set_value,
@@ -200,13 +200,13 @@ class TearDownHandler:
             # jsonpath 数据解析
             value_types = ['int:', 'bool:', 'list:', 'dict:', 'tuple:', 'float:']
             if any(i in _cache_name for i in value_types) is True:
-                # _cache_data = Cache(_cache_name.split(':')[1]).get_cache()
+                # _cache_data = cache(_cache_name.split(':')[1]).get_cache()
                 _cache_data = CacheHandler.get_cache(_cache_name.split(':')[1])
                 _new_data += f" = {_cache_data}"
 
             # 最终提取到的数据,转换成 _teardown_case[xxx][xxx]
             else:
-                # _cache_data = Cache(_cache_name).get_cache()
+                # _cache_data = cache(_cache_name).get_cache()
                 _cache_data = CacheHandler.get_cache(_cache_name)
                 _new_data += f" = '{_cache_data}'"
 
@@ -223,7 +223,7 @@ class TearDownHandler:
         """
         _send_request = data.send_request
         _case_id = data.case_id
-        # _teardown_case = ast.literal_eval(Cache('case_process').get_cache())[_case_id]
+        # _teardown_case = ast.literal_eval(cache('case_process').get_cache())[_case_id]
         _teardown_case = CacheHandler.get_cache(_case_id)
         for i in _send_request:
             if i.dependent_type == 'cache':
@@ -256,7 +256,7 @@ class TearDownHandler:
         @return:
         """
         _case_id = data.case_id
-        # _teardown_case = ast.literal_eval(Cache('case_process').get_cache())[_case_id]
+        # _teardown_case = ast.literal_eval(cache('case_process').get_cache())[_case_id]
         _teardown_case = CacheHandler.get_cache(_case_id)
         _param_prepare = data.param_prepare
         res = self.teardown_http_requests(_teardown_case)

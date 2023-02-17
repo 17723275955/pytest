@@ -38,7 +38,7 @@ class SetCurrentRequestCache:
         )
         if _request_data is not False:
             CacheHandler.update_cache(cache_name=cache_name, value=_request_data[0])
-            # Cache(cache_name).set_caches(_request_data[0])
+            # cache(cache_name).set_caches(_request_data[0])
         else:
             raise ValueNotFoundError(
                 "缓存设置失败，程序中未检测到需要缓存的数据。"
@@ -55,7 +55,7 @@ class SetCurrentRequestCache:
         _response_data = jsonpath(json.loads(self.response_data), jsonpath_value)
         if _response_data is not False:
             CacheHandler.update_cache(cache_name=cache_name, value=_response_data[0])
-            # Cache(cache_name).set_caches(_response_data[0])
+            # cache(cache_name).set_caches(_response_data[0])
         else:
             raise ValueNotFoundError("缓存设置失败，程序中未检测到需要缓存的数据。"
                                      f"请求参数: {self.response_data}"

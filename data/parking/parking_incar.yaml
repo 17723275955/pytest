@@ -1,0 +1,64 @@
+case_common:
+  allureEpic: 开发平台接口
+  allureFeature: 停车模块
+  allureStory: 车辆入场
+
+parking_incar:
+    host: ${{host()}}
+    url: /show-parking/parking/postCarInInfo
+    method: POST
+    detail: 车辆入场
+    headers:
+      # 这里cookie的值，写的是存入缓存的名称
+      Authorization: Bearer $cache{token}
+    # 请求的数据，是 params 还是 json、或者file、data
+    requestType: json
+    # 是否执行，空或者 true 都会执行
+    is_run:
+    data:
+      {
+        "carInExt": {
+          "vehicleBrand": "奔驰",
+          "vehicleModel": "0",
+          "plateColor": "蓝"
+        },
+        "carType": 0,
+        "cardNo": "",
+        "nodeCode": "27",
+        "entryTime": "2023-02-13 09:00:00",
+        "imgInfo": "https://image-cn.zhongjia.com/701000386/172.19.2.2/2022/06/08/20220608162100233_172.19.2.2_001417.jpg",
+        "imgName": "20220608162100233_172.19.2.2_001417.jpg",
+        "imgType": 2,
+        "modifyLpnFlag": 0,
+        "parkId": 330863074,
+        "passType": 0,
+        "plateNo": "渝A10076",
+        "recognitionCredibility": "997",
+        "reqId": "16",
+        "totalLots": 59,
+        "ts": 1669434150000
+      }
+
+    dependence_case: False
+    # 依赖的数据
+    dependence_case_data:
+    assert:
+      # 断言接口状态码
+      errorCode:
+        jsonpath: $.resCode
+        type: ==
+        value: 0
+        AssertType:
+
+#      plate_number:
+#        jsonpath: $.resCode
+#        type: ==
+#        value: $.plate_number
+#        AssertType: SQL
+    current_request_set_cache:
+      - type: response
+        jsonpath: $.reqId
+        # 自定义的缓存名称
+        name: 黄宇
+    sql:
+      - SELECT plate_number FROM smart_parking_test2.parking_order where plate_number="渝A10076";
