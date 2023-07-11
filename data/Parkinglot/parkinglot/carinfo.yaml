@@ -1,0 +1,235 @@
+case_common:
+  allureEpic: 停车接口
+  allureFeature: 停车场管理模块
+  allureStory: 车位信息
+
+carinfo:
+    host: ${{host()}}
+    url: /show-parking/parking/space/pageList
+    method: GET
+    detail: 车位信息
+    headers:
+      Content-Type: application/json
+      # 这里cookie的值，写的是存入缓存的名称
+      Authorization: Bearer $cache{token}
+    # 请求的数据，是 params 还是 json、或者file、data
+    requestType: params
+    # 是否执行，空或者 true 都会执行
+    is_run:
+    data:
+      parkingName:
+      spaceCode:
+      parkingId: 330863074
+      pageNumber: 1
+      pageSize: 10
+
+
+    dependence_case: False
+    # 依赖的数据
+    dependence_case_data:
+    assert:
+      # 断言接口状态码
+      errorCode:
+        jsonpath: $.code
+        type: ==
+        value: 200
+        AssertType:
+      message:
+        jsonpath: $.message
+        type: ==
+        value: "操作成功"
+        AssertType:
+
+    sql:
+    teardown_sql:
+
+add_carnum:
+    host: ${{host()}}
+    url: /show-parking/parking/space/add
+    method: POST
+    detail: 新增车位信息
+    headers:
+      Content-Type: application/json
+      # 这里cookie的值，写的是存入缓存的名称
+      Authorization: Bearer $cache{token}
+    # 请求的数据，是 params 还是 json、或者file、data
+    requestType: json
+    # 是否执行，空或者 true 都会执行
+    is_run:
+    data:
+      {"parkingId":330561448,"area":"1","spaceCode":"AA201","chargeSpace":true}
+
+
+    dependence_case: False
+    # 依赖的数据
+    dependence_case_data:
+    assert:
+      # 断言接口状态码
+      errorCode:
+        jsonpath: $.code
+        type: ==
+        value: 200
+        AssertType:
+      message:
+        jsonpath: $.message
+        type: ==
+        value: "操作成功"
+        AssertType:
+
+
+    sql:
+    teardown_sql:
+      - delete FROM `smart_parking_test2`.`parking_space` WHERE `space_code` ='AA201'
+
+add_muchcarnum:
+    host: ${{host()}}
+    url: /show-parking/parking/space/batchAdd
+    method: POST
+    detail: 批量新增信息
+    headers:
+      Content-Type: application/json
+      # 这里cookie的值，写的是存入缓存的名称
+      Authorization: Bearer $cache{token}
+    # 请求的数据，是 params 还是 json、或者file、data
+    requestType: json
+    # 是否执行，空或者 true 都会执行
+    is_run:
+    data:
+      {"parkingId":330863074,"area":"1","prefixCode":"AA","beginNum":1,"endNum":10,"chargeSpace":true}
+
+
+    dependence_case: False
+    # 依赖的数据
+    dependence_case_data:
+    assert:
+      # 断言接口状态码
+      errorCode:
+        jsonpath: $.code
+        type: ==
+        value: 200
+        AssertType:
+      message:
+        jsonpath: $.message
+        type: ==
+        value: "操作成功"
+        AssertType:
+
+    sql:
+    teardown_sql:
+      - delete FROM `smart_parking_test2`.`parking_space` WHERE `space_code` like '%AA%'
+
+select_carnum:
+    host: ${{host()}}
+    url: /show-parking/parking/space/pageList
+    method: GET
+    detail: 查询车位
+    headers:
+      Content-Type: application/json
+      # 这里cookie的值，写的是存入缓存的名称
+      Authorization: Bearer $cache{token}
+    # 请求的数据，是 params 还是 json、或者file、data
+    requestType: params
+    # 是否执行，空或者 true 都会执行
+    is_run:
+    data:
+      parkingName: 鹰潭北站公园停车场
+      spaceCode: 2
+      parkingId: 330863074
+      pageNumber: 1
+      pageSize: 10
+
+
+    dependence_case: False
+    # 依赖的数据
+    dependence_case_data:
+    assert:
+      # 断言接口状态码
+      errorCode:
+        jsonpath: $.code
+        type: ==
+        value: 200
+        AssertType:
+      message:
+        jsonpath: $.message
+        type: ==
+        value: "操作成功"
+        AssertType:
+
+    sql:
+    teardown_sql:
+
+reset_carnum:
+    host: ${{host()}}
+    url: /show-parking/parking/space/pageList
+    method: GET
+    detail: 重置查询车位
+    headers:
+      Content-Type: application/json
+      # 这里cookie的值，写的是存入缓存的名称
+      Authorization: Bearer $cache{token}
+    # 请求的数据，是 params 还是 json、或者file、data
+    requestType: params
+    # 是否执行，空或者 true 都会执行
+    is_run:
+    data:
+      parkingName: 鹰潭北站公园停车场
+      spaceCode:
+      parkingId: 330863074
+      pageNumber: 1
+      pageSize: 10
+
+
+    dependence_case: False
+    # 依赖的数据
+    dependence_case_data:
+    assert:
+      # 断言接口状态码
+      errorCode:
+        jsonpath: $.code
+        type: ==
+        value: 200
+        AssertType:
+      message:
+        jsonpath: $.message
+        type: ==
+        value: "操作成功"
+        AssertType:
+
+    sql:
+    teardown_sql:
+
+car_detail:
+    host: ${{host()}}
+    url: /show-parking/parking/space/detail
+    method: GET
+    detail: 车位详情
+    headers:
+      Content-Type: application/json
+      # 这里cookie的值，写的是存入缓存的名称
+      Authorization: Bearer $cache{token}
+    # 请求的数据，是 params 还是 json、或者file、data
+    requestType: params
+    # 是否执行，空或者 true 都会执行
+    is_run:
+    data:
+      id: 255
+
+
+    dependence_case: False
+    # 依赖的数据
+    dependence_case_data:
+    assert:
+      # 断言接口状态码
+      errorCode:
+        jsonpath: $.code
+        type: ==
+        value: 200
+        AssertType:
+      message:
+        jsonpath: $.message
+        type: ==
+        value: "操作成功"
+        AssertType:
+
+    sql:
+    teardown_sql:

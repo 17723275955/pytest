@@ -1,0 +1,120 @@
+case_common:
+  allureEpic: 停车接口
+  allureFeature: 停车场管理模块
+  allureStory: 停车场信息
+
+parkinginfo:
+    host: ${{host()}}
+    url: /show-parking/parkinglot/detail
+    method: GET
+    detail: 停车场信息
+    headers:
+      # 这里cookie的值，写的是存入缓存的名称
+      Authorization: Bearer $cache{token}
+    # 请求的数据，是 params 还是 json、或者file、data
+    requestType: params
+    # 是否执行，空或者 true 都会执行
+    is_run:
+    data:
+      id: 330863074
+
+    dependence_case: False
+    # 依赖的数据
+    dependence_case_data:
+    assert:
+      # 断言接口状态码
+      errorCode:
+        jsonpath: $.code
+        type: ==
+        value: 200
+        AssertType:
+      message:
+        jsonpath: $.message
+        type: ==
+        value: "操作成功"
+        AssertType:
+
+#      plate_number:
+#        jsonpath: $.resCode
+#        type: ==
+#        value: $.plate_number
+#        AssertType: SQL
+#    current_request_set_cache:
+#      - type: response
+#        jsonpath: $.success
+#        # 自定义的缓存名称
+#        name: 黄宇
+    sql:
+#      - SELECT plate_number FROM smart_parking_test2.parking_order where plate_number="渝A10076";
+
+
+parkinginfo_edit:
+    host: ${{host()}}
+    url: /show-parking/parkinglot/edit
+    method: POST
+    detail: 停车场信息编辑
+    headers:
+      Content-Type: application/json
+      # 这里cookie的值，写的是存入缓存的名称
+      Authorization: Bearer $cache{token}
+    # 请求的数据，是 params 还是 json、或者file、data
+    requestType: json
+    # 是否执行，空或者 true 都会执行
+    is_run:
+    data:
+      {"id":330863074,"parkingCode":"330863074","parkingName":"鹰潭北站公园停车场","totalNum":47,"chargeNum":0,"longitude":117.041621,"latitude":28.302703,"ruleContents":["包月，费用0.01元，新能源车缴费10%","时段收费，免费时间0分钟，新能源车缴费10%，计费周期按周期（24小时）;\n规则适用自然天，单日收费上限~元->开始时间00:00-结束时间23:59:59，刚开始30分钟，起步价5元，每超过60分钟加收1元，时段封顶~元;\n"],"province":360000,"provinceName":"江西省","city":360600,"cityName":"鹰潭市","area":360681,"areaName":"贵溪市","address":"鹰潭北站公园停车场","manager":"吴志欣","contactNumber":"13870002821","workTime":null,"imageUrl":null,"syncSource":"reformer_bzgy","inService":1,"freeNum":0,"syncSourceName":"立方"}
+
+    dependence_case: False
+    # 依赖的数据
+    dependence_case_data:
+    assert:
+      # 断言接口状态码
+      errorCode:
+        jsonpath: $.code
+        type: ==
+        value: 200
+        AssertType:
+      message:
+        jsonpath: $.message
+        type: ==
+        value: "操作成功"
+        AssertType:
+    sql:
+
+parkinginfo_edit_sync:
+    host: ${{host()}}
+    url: /show-parking/parkinglot/syncKeytopParkingLots
+    method: GET
+    detail: 停车场信息同步
+    headers:
+      Content-Type: application/json
+      # 这里cookie的值，写的是存入缓存的名称
+      Authorization: Bearer $cache{token}
+    # 请求的数据，是 params 还是 json、或者file、data
+    requestType: params
+    # 是否执行，空或者 true 都会执行
+    is_run:
+    data:
+      parkingId: 330561448
+
+    dependence_case: False
+    # 依赖的数据
+    dependence_case_data:
+    assert:
+      # 断言接口状态码
+      errorCode:
+        jsonpath: $.code
+        type: ==
+        value: 200
+        AssertType:
+      message:
+        jsonpath: $.message
+        type: ==
+        value: "操作成功"
+        AssertType:
+      data:
+        jsonpath: $.data
+        type: ==
+        value: "同步成功"
+        AssertType:
+    sql:

@@ -1,0 +1,343 @@
+case_common:
+  allureEpic: 停车接口
+  allureFeature: 停车场管理模块
+  allureStory: 通道信息
+
+nodeinfo:
+    host: ${{host()}}
+    url: /show-parking/parkingNode/item
+    method: POST
+    detail: 通道信息
+    headers:
+      Content-Type: application/json
+      # 这里cookie的值，写的是存入缓存的名称
+      Authorization: Bearer $cache{token}
+    # 请求的数据，是 params 还是 json、或者file、data
+    requestType: data
+    # 是否执行，空或者 true 都会执行
+    is_run:
+    data:
+      current: 1
+      size: 10
+      parkingId: 330863074
+
+    dependence_case: False
+    # 依赖的数据
+    dependence_case_data:
+    assert:
+      # 断言接口状态码
+      errorCode:
+        jsonpath: $.code
+        type: ==
+        value: 200
+        AssertType:
+      message:
+        jsonpath: $.message
+        type: ==
+        value: "操作成功"
+        AssertType:
+
+
+    sql:
+
+barrinfo:
+    host: ${{host()}}
+    url: /show-parking/parking/node/log/item
+    method: POST
+    detail: 道闸信息
+    headers:
+      Content-Type: application/json
+      # 这里cookie的值，写的是存入缓存的名称
+      Authorization: Bearer $cache{token}
+    # 请求的数据，是 params 还是 json、或者file、data
+    requestType: json
+    # 是否执行，空或者 true 都会执行
+    is_run:
+    data:
+      {"parkingId":330863074,"size":10,"current":1}
+
+    dependence_case: False
+    # 依赖的数据
+    dependence_case_data:
+    assert:
+      # 断言接口状态码
+      errorCode:
+        jsonpath: $.code
+        type: ==
+        value: 200
+        AssertType:
+      message:
+        jsonpath: $.message
+        type: ==
+        value: "操作成功"
+        AssertType:
+    sql:
+
+cut_off_01:
+    host: ${{host()}}
+    url: /show-parking/parkingNode/control
+    method: POST
+    detail: 通道开闸不变更车位余量
+    headers:
+      Content-Type: application/json
+      # 这里cookie的值，写的是存入缓存的名称
+      Authorization: Bearer $cache{token}
+    # 请求的数据，是 params 还是 json、或者file、data
+    requestType: json
+    # 是否执行，空或者 true 都会执行
+    is_run:
+    data:
+      {"controlCode":0,"parkingId":330863074,"parkingNodeId":28,"updateParkingFreeNum":1}
+
+    dependence_case: False
+    # 依赖的数据
+    dependence_case_data:
+    assert:
+      # 断言接口状态码
+      errorCode:
+        jsonpath: $.code
+        type: ==
+        value: 200
+        AssertType:
+      message:
+        jsonpath: $.message
+        type: ==
+        value: "操作成功"
+        AssertType:
+    sql:
+
+
+cut_off_02:
+    host: ${{host()}}
+    url: /show-parking/parkingNode/control
+    method: POST
+    detail: 通道开闸变更车位余量
+    headers:
+      Content-Type: application/json
+      # 这里cookie的值，写的是存入缓存的名称
+      Authorization: Bearer $cache{token}
+    # 请求的数据，是 params 还是 json、或者file、data
+    requestType: json
+    # 是否执行，空或者 true 都会执行
+    is_run:
+    data:
+      {"controlCode":0,"parkingId":330863074,"parkingNodeId":28,"updateParkingFreeNum":0}
+
+    dependence_case: False
+    # 依赖的数据
+    dependence_case_data:
+    assert:
+      # 断言接口状态码
+      errorCode:
+        jsonpath: $.code
+        type: ==
+        value: 200
+        AssertType:
+      message:
+        jsonpath: $.message
+        type: ==
+        value: "操作成功"
+        AssertType:
+    sql:
+
+node_detail:
+    host: ${{host()}}
+    url: /show-parking/parking/node/log/item
+    method: POST
+    detail: 通道详情
+    headers:
+      Content-Type: application/json
+      # 这里cookie的值，写的是存入缓存的名称
+      Authorization: Bearer $cache{token}
+    # 请求的数据，是 params 还是 json、或者file、data
+    requestType: json
+    # 是否执行，空或者 true 都会执行
+    is_run:
+    data:
+      {"nodeId":"28","size":10,"current":1}
+
+    dependence_case: False
+    # 依赖的数据
+    dependence_case_data:
+    assert:
+      # 断言接口状态码
+      errorCode:
+        jsonpath: $.code
+        type: ==
+        value: 200
+        AssertType:
+      message:
+        jsonpath: $.message
+        type: ==
+        value: "操作成功"
+        AssertType:
+    sql:
+
+creat_code:
+    host: ${{host()}}
+    url: /show-parking/parkingNode/createWxQrcode
+    method: POST
+    detail: 通道二维码生成
+    headers:
+      Content-Type: application/json
+      # 这里cookie的值，写的是存入缓存的名称
+      Authorization: Bearer $cache{token}
+    # 请求的数据，是 params 还是 json、或者file、data
+    requestType: json
+    # 是否执行，空或者 true 都会执行
+    is_run:
+    data:
+      {"id":28}
+
+    dependence_case: False
+    # 依赖的数据
+    dependence_case_data:
+    assert:
+      # 断言接口状态码
+      errorCode:
+        jsonpath: $.code
+        type: ==
+        value: 200
+        AssertType:
+      message:
+        jsonpath: $.message
+        type: ==
+        value: "操作成功"
+        AssertType:
+    sql:
+
+node_edit:
+    host: ${{host()}}
+    url: /show-parking/parkingNode/edit
+    method: POST
+    detail: 通道信息编辑
+    headers:
+      Content-Type: application/json
+      # 这里cookie的值，写的是存入缓存的名称
+      Authorization: Bearer $cache{token}
+    # 请求的数据，是 params 还是 json、或者file、data
+    requestType: json
+    # 是否执行，空或者 true 都会执行
+    is_run:
+    data:
+      {"id":28,"nodeId":"28","nodeName":"停车场出口(出场通道1)","parkingId":330863074,"type":2,"state":true}
+
+    dependence_case: False
+    # 依赖的数据
+    dependence_case_data:
+    assert:
+      # 断言接口状态码
+      errorCode:
+        jsonpath: $.code
+        type: ==
+        value: 200
+        AssertType:
+      message:
+        jsonpath: $.message
+        type: ==
+        value: "操作成功"
+        AssertType:
+
+    sql:
+
+shut_off:
+    host: ${{host()}}
+    url: /show-parking/parkingNode/control
+    method: POST
+    detail: 关闭道闸
+    headers:
+      Content-Type: application/json
+      # 这里cookie的值，写的是存入缓存的名称
+      Authorization: Bearer $cache{token}
+    # 请求的数据，是 params 还是 json、或者file、data
+    requestType: json
+    # 是否执行，空或者 true 都会执行
+    is_run:
+    data:
+      {"controlCode":1,"parkingId":330863074,"parkingNodeId":28}
+
+    dependence_case: False
+    # 依赖的数据
+    dependence_case_data:
+    assert:
+      # 断言接口状态码
+      errorCode:
+        jsonpath: $.code
+        type: ==
+        value: 200
+        AssertType:
+      message:
+        jsonpath: $.message
+        type: ==
+        value: "操作成功"
+        AssertType:
+
+    sql:
+
+node_turndown:
+    host: ${{host()}}
+    url: /show-parking/parkingNode/control
+    method: POST
+    detail: 强制常开
+    headers:
+      Content-Type: application/json
+      # 这里cookie的值，写的是存入缓存的名称
+      Authorization: Bearer $cache{token}
+    # 请求的数据，是 params 还是 json、或者file、data
+    requestType: json
+    # 是否执行，空或者 true 都会执行
+    is_run:
+    data:
+      {"controlCode":2,"parkingId":330863074,"parkingNodeId":28}
+
+    dependence_case: False
+    # 依赖的数据
+    dependence_case_data:
+    assert:
+      # 断言接口状态码
+      errorCode:
+        jsonpath: $.code
+        type: ==
+        value: 200
+        AssertType:
+      message:
+        jsonpath: $.message
+        type: ==
+        value: "操作成功"
+        AssertType:
+
+    sql:
+
+node_shutdown:
+    host: ${{host()}}
+    url: /show-parking/parkingNode/control
+    method: POST
+    detail: 结束常开
+    headers:
+      Content-Type: application/json
+      # 这里cookie的值，写的是存入缓存的名称
+      Authorization: Bearer $cache{token}
+    # 请求的数据，是 params 还是 json、或者file、data
+    requestType: json
+    # 是否执行，空或者 true 都会执行
+    is_run:
+    data:
+      {"controlCode":3,"parkingId":330863074,"parkingNodeId":28}
+
+    dependence_case: False
+    # 依赖的数据
+    dependence_case_data:
+    assert:
+      # 断言接口状态码
+      errorCode:
+        jsonpath: $.code
+        type: ==
+        value: 200
+        AssertType:
+      message:
+        jsonpath: $.message
+        type: ==
+        value: "操作成功"
+        AssertType:
+
+    sql:

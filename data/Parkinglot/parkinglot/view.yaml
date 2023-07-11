@@ -1,0 +1,82 @@
+case_common:
+  allureEpic: 停车接口
+  allureFeature: 停车场管理模块
+  allureStory: 监控查看
+
+
+
+
+check_view:
+    host: ${{host()}}
+    url: /show-parking/device/pageList?pageNumber=1&pageSize=1000&parkingId=330863074&parkingType=parkinglot
+    method: GET
+    detail: 监控查看首页
+    headers:
+      Content-Type: application/json
+      # 这里cookie的值，写的是存入缓存的名称
+      Authorization: Bearer $cache{token}
+    # 请求的数据，是 params 还是 json、或者file、data
+    requestType: json
+    # 是否执行，空或者 true 都会执行
+    is_run:
+    data:
+
+
+
+    dependence_case: False
+    # 依赖的数据
+    dependence_case_data:
+    assert:
+      # 断言接口状态码
+      errorCode:
+        jsonpath: $.code
+        type: ==
+        value: 200
+        AssertType:
+      message:
+        jsonpath: $.data.records[0].parkingId
+        type: ==
+        value: 330863074
+        AssertType:
+
+    sql:
+    teardown_sql:
+#      - delete  from `smart_parking_test2`.`parking_order` WHERE plate_number = '浙Q11111'
+
+
+refresh_view:
+    host: ${{host()}}
+    url: /stream-service/video/stopLive
+    method: POST
+    detail: 监控刷新
+    headers:
+      Content-Type: application/json
+      # 这里cookie的值，写的是存入缓存的名称
+      Authorization: Bearer $cache{token}
+    # 请求的数据，是 params 还是 json、或者file、data
+    requestType: json
+    # 是否执行，空或者 true 都会执行
+    is_run:
+    data: {"provider":"hik","deviceCode":"61125a5370b04f3aad09efd46859c9c5&330863074","videoUrl":null,"user":60,"ext":{"size":"720x480"}}
+
+
+
+    dependence_case: False
+    # 依赖的数据
+    dependence_case_data:
+    assert:
+      # 断言接口状态码
+      errorCode:
+        jsonpath: $.code
+        type: ==
+        value: 200
+        AssertType:
+      message:
+        jsonpath: $.message
+        type: ==
+        value: "success"
+        AssertType:
+
+    sql:
+    teardown_sql:
+#      - delete  from `smart_parking_test2`.`parking_order` WHERE plate_number = '浙Q11111'

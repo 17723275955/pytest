@@ -1,0 +1,228 @@
+case_common:
+  allureEpic: 停车接口
+  allureFeature: 停车场管理模块
+  allureStory: 订单信息
+
+
+
+
+no_compleorder_search:
+    host: ${{host()}}
+    url: /show-parking/parking/order/pageList
+    method: POST
+    detail: 未完成订单查询
+    headers:
+      Content-Type: application/json
+      # 这里cookie的值，写的是存入缓存的名称
+      Authorization: Bearer $cache{token}
+    # 请求的数据，是 params 还是 json、或者file、data
+    requestType: json
+    # 是否执行，空或者 true 都会执行
+    is_run:
+    data:
+      {"pageNumber":1,"pageSize":10,"parkingId":330863074,"plateNumber":"浙Q10039","orderStatus":0,"enterBeginTime":"","enterEndTime":"","plateNoType":1}
+
+
+    dependence_case: False
+    # 依赖的数据
+    dependence_case_data:
+    assert:
+      # 断言接口状态码
+      errorCode:
+        jsonpath: $.code
+        type: ==
+        value: 200
+        AssertType:
+      message:
+        jsonpath: $.data.records[0].id
+        type: ==
+        value: 160715
+        AssertType:
+
+    sql:
+    teardown_sql:
+#      - delete  from `smart_parking_test2`.`parking_order` WHERE plate_number = '浙Q11111'
+
+
+no_compleorder_detail:
+    host: ${{host()}}
+    url: /show-parking/parking/order/detail?id=160715
+    method: GET
+    detail: 未完成订单详情
+    headers:
+      Content-Type: application/json
+      # 这里cookie的值，写的是存入缓存的名称
+      Authorization: Bearer $cache{token}
+    # 请求的数据，是 params 还是 json、或者file、data
+    requestType: json
+    # 是否执行，空或者 true 都会执行
+    is_run:
+    data:
+
+    dependence_case: False
+    # 依赖的数据
+    dependence_case_data:
+    assert:
+      # 断言接口状态码
+      errorCode:
+        jsonpath: $.code
+        type: ==
+        value: 200
+        AssertType:
+      message:
+        jsonpath: $.message
+        type: ==
+        value: "操作成功"
+        AssertType:
+
+    sql:
+    teardown_sql:
+#      - delete  from `smart_parking_test2`.`parking_order` WHERE plate_number = '浙Q11111'
+
+
+no_compleorder_plate_correct:
+    host: ${{host()}}
+    url: /show-parking/parking/order/plate/correction
+    method: PUT
+    detail: 车牌矫正
+    headers:
+      Content-Type: application/json
+      # 这里cookie的值，写的是存入缓存的名称
+      Authorization: Bearer $cache{token}
+    # 请求的数据，是 params 还是 json、或者file、data
+    requestType: json
+    # 是否执行，空或者 true 都会执行
+    is_run:
+    data: {"id":160715,"plateNumberType":"common","plateNumber":"浙Q10099"}
+
+    dependence_case: False
+    # 依赖的数据
+    dependence_case_data:
+    assert:
+      # 断言接口状态码
+      errorCode:
+        jsonpath: $.code
+        type: ==
+        value: 200
+        AssertType:
+      message:
+        jsonpath: $.message
+        type: ==
+        value: "操作成功"
+        AssertType:
+
+    sql:
+    teardown_sql:
+#      - delete  from `smart_parking_test2`.`parking_order` WHERE plate_number = '浙Q11111'
+      - update `smart_parking_test2`.`parking_order` set plate_number="浙Q10039" where order_no="P1646023860820185088"
+
+no_compleorder_plate_exception:
+    host: ${{host()}}
+    url: /show-parking/parking/order/batch/set/abnormal?orderIdList%5B0%5D=160715
+    method: GET
+    detail: 订单设为异常
+    headers:
+      Content-Type: application/json
+      # 这里cookie的值，写的是存入缓存的名称
+      Authorization: Bearer $cache{token}
+    # 请求的数据，是 params 还是 json、或者file、data
+    requestType: json
+    # 是否执行，空或者 true 都会执行
+    is_run:
+    data:
+
+
+    dependence_case: False
+    # 依赖的数据
+    dependence_case_data:
+    assert:
+      # 断言接口状态码
+      errorCode:
+        jsonpath: $.code
+        type: ==
+        value: 200
+        AssertType:
+      message:
+        jsonpath: $.message
+        type: ==
+        value: "操作成功"
+        AssertType:
+
+    sql:
+    teardown_sql:
+#      - delete  from `smart_parking_test2`.`parking_order` WHERE plate_number = '浙Q11111'
+        - update `smart_parking_test2`.`parking_order` set order_status=0 where order_no="P1646023860820185088"
+
+
+compleorder_search:
+    host: ${{host()}}
+    url: /show-parking/parking/order/pageList
+    method: POST
+    detail: 已完成订单查询
+    headers:
+      Content-Type: application/json
+      # 这里cookie的值，写的是存入缓存的名称
+      Authorization: Bearer $cache{token}
+    # 请求的数据，是 params 还是 json、或者file、data
+    requestType: json
+    # 是否执行，空或者 true 都会执行
+    is_run:
+    data:
+      {"pageNumber":1,"pageSize":10,"parkingId":330863074,"plateNumber":"10039","orderStatus":1,"enterBeginTime":"","enterEndTime":"","leaveBeginTime":"","leaveEndTime":""}
+
+
+    dependence_case: False
+    # 依赖的数据
+    dependence_case_data:
+    assert:
+      # 断言接口状态码
+      errorCode:
+        jsonpath: $.code
+        type: ==
+        value: 200
+        AssertType:
+      message:
+        jsonpath: $.data.records[0].orderNo
+        type: ==
+        value: 'P1646018400381636608'
+        AssertType:
+
+    sql:
+    teardown_sql:
+#      - delete  from `smart_parking_test2`.`parking_order` WHERE plate_number = '浙Q11111'
+
+
+compleorder_detail:
+    host: ${{host()}}
+    url: /show-parking/parking/order/detail?id=160711
+    method: GET
+    detail: 已完成订单详情
+    headers:
+      Content-Type: application/json
+      # 这里cookie的值，写的是存入缓存的名称
+      Authorization: Bearer $cache{token}
+    # 请求的数据，是 params 还是 json、或者file、data
+    requestType: json
+    # 是否执行，空或者 true 都会执行
+    is_run:
+    data:
+
+    dependence_case: False
+    # 依赖的数据
+    dependence_case_data:
+    assert:
+      # 断言接口状态码
+      errorCode:
+        jsonpath: $.code
+        type: ==
+        value: 200
+        AssertType:
+      message:
+        jsonpath: $.message
+        type: ==
+        value: "操作成功"
+        AssertType:
+
+    sql:
+    teardown_sql:
+#      - delete  from `smart_parking_test2`.`parking_order` WHERE plate_number = '浙Q11111'

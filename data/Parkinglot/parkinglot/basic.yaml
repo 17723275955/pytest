@@ -1,0 +1,82 @@
+case_common:
+  allureEpic: 停车接口
+  allureFeature: 停车场管理模块
+  allureStory: 基础配置
+
+
+
+
+basic_fun:
+    host: ${{host()}}
+    url: /show-parking/parkingConfig/
+    method: PUT
+    detail: 功能配置
+    headers:
+      Content-Type: application/json
+      # 这里cookie的值，写的是存入缓存的名称
+      Authorization: Bearer $cache{token}
+    # 请求的数据，是 params 还是 json、或者file、data
+    requestType: json
+    # 是否执行，空或者 true 都会执行
+    is_run:
+    data: {"id":3,"createBy":null,"createTime":"2022-11-26 14:49:27","updateBy":"admin","updateTime":"2023-04-20 10:30:57","parkingId":330863074,"urlPrefix":"http://192.168.1.125:19999/mock-api/mock","interfaceType":"standard_interface","token":"1111","localExpireTime":"2023-02-07 17:40:55","syncSource":"reformer_bzgy","enableEmptyOrderRelease":2,"wechatTaxRate":5.4,"alipayTaxRate":6,"etcTaxRate":3,"enableArrearageOrderMergePay":1,"policeFree":1,"policeNoSumControl":1,"afterPayFreeMinute":20,"rentLimit":10,"placeType":0,"etcParkId":"330863074","etcAppId":null,"placeControlDtoList":[{"countThreshold":2,"carType":5},{"countThreshold":2,"carType":1}]}
+
+
+
+    dependence_case: False
+    # 依赖的数据
+    dependence_case_data:
+    assert:
+      # 断言接口状态码
+      errorCode:
+        jsonpath: $.code
+        type: ==
+        value: 200
+        AssertType:
+      message:
+        jsonpath: $.message
+        type: ==
+        value: "操作成功"
+        AssertType:
+
+    sql:
+    teardown_sql:
+
+
+paking_place:
+    host: ${{host()}}
+    url: /show-parking/parkingConfig/
+    method: PUT
+    detail: 车位控制
+    headers:
+      Content-Type: application/json
+      # 这里cookie的值，写的是存入缓存的名称
+      Authorization: Bearer $cache{token}
+    # 请求的数据，是 params 还是 json、或者file、data
+    requestType: json
+    # 是否执行，空或者 true 都会执行
+    is_run:
+    data: {"id":3,"createBy":null,"createTime":"2022-11-26 14:49:27","updateBy":"admin","updateTime":"2023-04-20 13:18:34","parkingId":330863074,"urlPrefix":"http://192.168.1.125:19999/mock-api/mock","interfaceType":"standard_interface","token":"1111","localExpireTime":"2023-02-07 17:40:55","syncSource":"reformer_bzgy","enableEmptyOrderRelease":1,"wechatTaxRate":5.4,"alipayTaxRate":6,"etcTaxRate":3,"enableArrearageOrderMergePay":1,"policeFree":1,"policeNoSumControl":1,"afterPayFreeMinute":20,"rentLimit":10,"placeType":0,"etcParkId":"330863074","etcAppId":null,"placeControlDtoList":[{"countThreshold":"3","carType":5},{"countThreshold":2,"carType":1}]}
+
+
+
+    dependence_case: False
+    # 依赖的数据
+    dependence_case_data:
+    assert:
+      # 断言接口状态码
+      errorCode:
+        jsonpath: $.code
+        type: ==
+        value: 200
+        AssertType:
+      message:
+        jsonpath: $.message
+        type: ==
+        value: "操作成功"
+        AssertType:
+
+    sql:
+    teardown_sql:
+
+
