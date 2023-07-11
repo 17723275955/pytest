@@ -1,0 +1,355 @@
+case_common:
+  allureEpic: 停车接口
+  allureFeature: 运营管理模块
+  allureStory: 计费包管理
+
+
+
+
+add_chargepackge:
+  host: ${{host()}}
+  url: /show-parking/fee/package/add
+  method: POST
+  detail: 新增计费包-北站公园测试的
+  headers:
+    Content-Type: application/json
+    # 这里cookie的值，写的是存入缓存的名称
+    Authorization: Bearer $cache{token}
+  # 请求的数据，是 params 还是 json、或者file、data
+  requestType: json
+  # 是否执行，空或者 true 都会执行
+  is_run:
+  data:
+    {"name":"pytest测试计费包","parkingLotList":[{"parkingId":415258348,"parkingType":"parkinglot"}],"tempRuleId":545,"rentRuleIdList":[48]}
+
+
+  dependence_case: False
+  # 依赖的数据
+  dependence_case_data:
+  assert:
+    # 断言接口状态码
+    errorCode:
+      jsonpath: $.code
+      type: ==
+      value: 200
+      AssertType:
+    message:
+      jsonpath: $.message
+      type: ==
+      value: '操作成功'
+      AssertType:
+
+  sql:
+  teardown_sql:
+    - delete  from `smart_parking_test2_4`.`fee_package_base` WHERE name = 'pytest测试计费包'
+    - delete  from `smart_parking_test2_4`.`fee_package_parking` WHERE parking_id = '415258348'
+
+select_chargepackge:
+  host: ${{host()}}
+  url: /show-parking/fee/package/pageList?name=$cache{name}&parkingName=&pageNumber=1&pageSize=10
+  method: GET
+  detail: 查询计费包-北站公园测试的
+  headers:
+    Content-Type: application/json
+    # 这里cookie的值，写的是存入缓存的名称
+    Authorization: Bearer $cache{token}
+  # 请求的数据，是 params 还是 json、或者file、data
+  requestType: json
+  # 是否执行，空或者 true 都会执行
+  is_run:
+  data:
+
+
+
+  dependence_case: True
+  # 依赖的数据
+  dependence_case_data:
+    - case_id: add_chargepackge
+      dependent_data:
+        - dependent_type: request
+          jsonpath: $.name
+          set_cache: name
+  assert:
+    # 断言接口状态码
+    errorCode:
+      jsonpath: $.code
+      type: ==
+      value: 200
+      AssertType:
+    message:
+      jsonpath: $.message
+      type: ==
+      value: '操作成功'
+      AssertType:
+
+  sql:
+  teardown_sql:
+    - delete  from `smart_parking_test2_4`.`fee_package_base` WHERE name = 'pytest测试计费包'
+    - delete  from `smart_parking_test2_4`.`fee_package_parking` WHERE parking_id = '415258348'
+
+select_area:
+  host: ${{host()}}
+  url: /show-parking/fee/package/pageList?name=&parkingName=%E9%B9%B0%E6%BD%AD%E5%8C%97%E7%AB%99%E5%85%AC%E5%9B%AD%E6%B5%8B%E8%AF%95&pageNumber=1&pageSize=10
+  method: GET
+  detail: 查询计费包-北站公园测试的区域
+  headers:
+    Content-Type: application/json
+    # 这里cookie的值，写的是存入缓存的名称
+    Authorization: Bearer $cache{token}
+  # 请求的数据，是 params 还是 json、或者file、data
+  requestType: json
+  # 是否执行，空或者 true 都会执行
+  is_run:
+  data:
+
+
+
+  dependence_case: True
+  # 依赖的数据
+  dependence_case_data:
+    - case_id: add_chargepackge
+      dependent_data:
+        - dependent_type: request
+          jsonpath: $.name
+          set_cache: name
+  assert:
+    # 断言接口状态码
+    errorCode:
+      jsonpath: $.code
+      type: ==
+      value: 200
+      AssertType:
+    message:
+      jsonpath: $.message
+      type: ==
+      value: '操作成功'
+      AssertType:
+
+  sql:
+  teardown_sql:
+    - delete  from `smart_parking_test2_4`.`fee_package_base` WHERE name = 'pytest测试计费包'
+    - delete  from `smart_parking_test2_4`.`fee_package_parking` WHERE parking_id = '415258348'
+
+
+del_chargepackge:
+  host: ${{host()}}
+  url: /show-parking/fee/package/delete
+  method: DELETE
+  detail: 删除计费包-北站公园测试的
+  headers:
+    Content-Type: application/json
+    # 这里cookie的值，写的是存入缓存的名称
+    Authorization: Bearer $cache{token}
+  # 请求的数据，是 params 还是 json、或者file、data
+  requestType: json
+  # 是否执行，空或者 true 都会执行
+  is_run:
+  data:
+    "idList": ['$cache{id}']
+
+
+
+  dependence_case: True
+  # 依赖的数据
+  dependence_case_data:
+    - case_id: select_chargepackge
+      dependent_data:
+        - dependent_type: response
+          jsonpath: $.data.records[0].childId
+          set_cache: id
+  assert:
+    # 断言接口状态码
+    errorCode:
+      jsonpath: $.code
+      type: ==
+      value: 200
+      AssertType:
+    message:
+      jsonpath: $.message
+      type: ==
+      value: '操作成功'
+      AssertType:
+
+  sql:
+  teardown_sql:
+#    - delete  from `smart_parking_test2_4`.`fee_package_base` WHERE name = 'pytest测试计费包'
+#    - delete  from `smart_parking_test2_4`.`fee_package_parking` WHERE parking_id = '415258348'
+
+
+edit_chargepackge:
+  host: ${{host()}}
+  url: /show-parking/fee/package/update
+  method: PUT
+  detail: 编辑计费包
+  headers:
+    Content-Type: application/json
+    # 这里cookie的值，写的是存入缓存的名称
+    Authorization: Bearer $cache{token}
+  # 请求的数据，是 params 还是 json、或者file、data
+  requestType: json
+  # 是否执行，空或者 true 都会执行
+  is_run:
+  data:
+    {"id":'$cache{id}',"name":"$cache{name}","tempRuleId":545,"rentRuleIdList":[48],"parkingLotList":[{"parkingType":"parkinglot","parkingId":415258348,"parkingName":"鹰潭北站公园停车场"}],"childId":'$cache{id}'}
+
+
+
+  dependence_case: True
+  # 依赖的数据
+  dependence_case_data:
+    - case_id: select_chargepackge
+      dependent_data:
+        - dependent_type: response
+          jsonpath: $.data.records[0].name
+          set_cache: name
+        - dependent_type: response
+          jsonpath: $.data.records[0].childId
+          set_cache: id
+  assert:
+    # 断言接口状态码
+    errorCode:
+      jsonpath: $.code
+      type: ==
+      value: 200
+      AssertType:
+    message:
+      jsonpath: $.message
+      type: ==
+      value: '操作成功'
+      AssertType:
+
+  sql:
+  teardown_sql:
+      - delete  from `smart_parking_test2_4`.`fee_package_base` WHERE name = 'pytest测试计费包'
+      - delete  from `smart_parking_test2_4`.`fee_package_parking` WHERE parking_id = '415258348'
+
+details_chargepackge:
+  host: ${{host()}}
+  url: /show-parking/fee/package/detail?childId=$cache{id}
+  method: GET
+  detail: 查看计费包详情
+  headers:
+    Content-Type: application/json
+    # 这里cookie的值，写的是存入缓存的名称
+    Authorization: Bearer $cache{token}
+  # 请求的数据，是 params 还是 json、或者file、data
+  requestType: json
+  # 是否执行，空或者 true 都会执行
+  is_run:
+  data:
+
+
+
+  dependence_case: True
+  # 依赖的数据
+  dependence_case_data:
+    - case_id: select_chargepackge
+      dependent_data:
+        - dependent_type: response
+          jsonpath: $.data.records[0].childId
+          set_cache: id
+  assert:
+    # 断言接口状态码
+    errorCode:
+      jsonpath: $.code
+      type: ==
+      value: 200
+      AssertType:
+    message:
+      jsonpath: $.message
+      type: ==
+      value: '操作成功'
+      AssertType:
+
+  sql:
+  teardown_sql:
+    - delete  from `smart_parking_test2_4`.`fee_package_base` WHERE name = 'pytest测试计费包'
+    - delete  from `smart_parking_test2_4`.`fee_package_parking` WHERE parking_id = '415258348'
+
+
+resting_chargepackge:
+  host: ${{host()}}
+  url: /show-parking/fee/package/pageList?name=&parkingName=&pageNumber=1&pageSize=10
+  method: GET
+  detail: 重置计费规则
+  headers:
+    Content-Type: application/json
+    # 这里cookie的值，写的是存入缓存的名称
+    Authorization: Bearer $cache{token}
+  # 请求的数据，是 params 还是 json、或者file、data
+  requestType: json
+  # 是否执行，空或者 true 都会执行
+  is_run:
+  data:
+
+
+
+  dependence_case: False
+  # 依赖的数据
+  dependence_case_data:
+    - case_id: add_chargepackee
+      dependent_data:
+        - dependent_type: request
+          jsonpath: $.name
+          set_cache: name
+  assert:
+    # 断言接口状态码
+    errorCode:
+      jsonpath: $.code
+      type: ==
+      value: 200
+      AssertType:
+    message:
+      jsonpath: $.message
+      type: ==
+      value: '操作成功'
+      AssertType:
+
+  sql:
+  teardown_sql:
+#    - delete  from `smart_parking_test2_4`.`fee_rule` WHERE name = '计费规则pytest-时长'
+
+
+alldel_chargepackge:
+    host: ${{host()}}
+    url: /show-parking/fee/package/delete
+    method: DELETE
+    detail: 批量删除计费包-北站公园测试的
+    headers:
+      Content-Type: application/json
+      # 这里cookie的值，写的是存入缓存的名称
+      Authorization: Bearer $cache{token}
+    # 请求的数据，是 params 还是 json、或者file、data
+    requestType: json
+    # 是否执行，空或者 true 都会执行
+    is_run:
+    data:
+      "idList": [ '$cache{id}' ]
+
+
+
+    dependence_case: True
+    # 依赖的数据
+    dependence_case_data:
+      - case_id: select_chargepackge
+        dependent_data:
+          - dependent_type: response
+            jsonpath: $.data.records[0].childId
+            set_cache: id
+    assert:
+      # 断言接口状态码
+      errorCode:
+        jsonpath: $.code
+        type: ==
+        value: 200
+        AssertType:
+      message:
+        jsonpath: $.message
+        type: ==
+        value: '操作成功'
+        AssertType:
+
+    sql:
+    teardown_sql:
+  #    - delete  from `smart_parking_test2_4`.`fee_package_base` WHERE name = 'pytest测试计费包'
+  #    - delete  from `smart_parking_test2_4`.`fee_package_parking` WHERE parking_id = '415258348'

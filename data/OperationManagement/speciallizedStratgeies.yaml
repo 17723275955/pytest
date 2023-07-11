@@ -1,0 +1,395 @@
+case_common:
+  allureEpic: 停车接口
+  allureFeature: 运营管理模块
+  allureStory: 特殊策略管理
+
+
+
+
+add_specialstratgey:
+  host: ${{host()}}
+  url: /show-parking/operation/strategy/add
+  method: POST
+  detail: 新增特殊策略-胜利东路
+  headers:
+    Content-Type: application/json
+    # 这里cookie的值，写的是存入缓存的名称
+    Authorization: Bearer $cache{token}
+  # 请求的数据，是 params 还是 json、或者file、data
+  requestType: json
+  # 是否执行，空或者 true 都会执行
+  is_run:
+  data:
+    {"policyName":"pytest特殊策略","remark":"1","strategyRegionList":[{"regionType":1,"regionId":8}],"status":1,"startTime":"2023-06-30 00:00:00","endTime":"2023-07-01 23:59:59"}
+
+
+  dependence_case: False
+  # 依赖的数据
+  dependence_case_data:
+  assert:
+    # 断言接口状态码
+    errorCode:
+      jsonpath: $.code
+      type: ==
+      value: 200
+      AssertType:
+    message:
+      jsonpath: $.message
+      type: ==
+      value: '操作成功'
+      AssertType:
+
+  sql:
+  teardown_sql:
+    - delete  from `smart_parking_test2_4`.`operation_strategy` WHERE policy_name = 'pytest特殊策略'
+
+
+select_specialstratgey:
+  host: ${{host()}}
+  url: /show-parking/operation/strategy/page?policyName=$cache{name}&pageNumber=1&pageSize=10
+  method: GET
+  detail: 查询特殊策略-pytest特殊策略
+  headers:
+    Content-Type: application/json
+    # 这里cookie的值，写的是存入缓存的名称
+    Authorization: Bearer $cache{token}
+  # 请求的数据，是 params 还是 json、或者file、data
+  requestType: json
+  # 是否执行，空或者 true 都会执行
+  is_run:
+  data:
+
+
+
+  dependence_case: True
+  # 依赖的数据
+  dependence_case_data:
+    - case_id: add_specialstratgey
+      dependent_data:
+        - dependent_type: request
+          jsonpath: $.policyName
+          set_cache: name
+  assert:
+    # 断言接口状态码
+    errorCode:
+      jsonpath: $.code
+      type: ==
+      value: 200
+      AssertType:
+    message:
+      jsonpath: $.message
+      type: ==
+      value: '操作成功'
+      AssertType:
+
+  sql:
+  teardown_sql:
+    - delete  from `smart_parking_test2_4`.`operation_strategy` WHERE policy_name = 'pytest特殊策略'
+
+
+status_turn:
+  host: ${{host()}}
+  url: /show-parking/operation/strategy/update/status
+  method: POST
+  detail: 启用策略
+  headers:
+    Content-Type: application/json
+    # 这里cookie的值，写的是存入缓存的名称
+    Authorization: Bearer $cache{token}
+  # 请求的数据，是 params 还是 json、或者file、data
+  requestType: json
+  # 是否执行，空或者 true 都会执行
+  is_run:
+  data:
+    {"id":'$cache{id}',"status":1}
+
+
+
+  dependence_case: True
+  # 依赖的数据
+  dependence_case_data:
+    - case_id: select_specialstratgey
+      dependent_data:
+        - dependent_type: response
+          jsonpath: $.data.records[0].id
+          set_cache: id
+  assert:
+    # 断言接口状态码
+    errorCode:
+      jsonpath: $.code
+      type: ==
+      value: 200
+      AssertType:
+    message:
+      jsonpath: $.message
+      type: ==
+      value: '操作成功'
+      AssertType:
+
+  sql:
+  teardown_sql:
+    - delete  from `smart_parking_test2_4`.`operation_strategy` WHERE policy_name = 'pytest特殊策略'
+
+status_down:
+  host: ${{host()}}
+  url: /show-parking/operation/strategy/update/status
+  method: POST
+  detail: 关闭策略
+  headers:
+    Content-Type: application/json
+    # 这里cookie的值，写的是存入缓存的名称
+    Authorization: Bearer $cache{token}
+  # 请求的数据，是 params 还是 json、或者file、data
+  requestType: json
+  # 是否执行，空或者 true 都会执行
+  is_run:
+  data:
+    {"id":'$cache{id}',"status":0}
+
+
+
+  dependence_case: True
+  # 依赖的数据
+  dependence_case_data:
+    - case_id: select_specialstratgey
+      dependent_data:
+        - dependent_type: response
+          jsonpath: $.data.records[0].id
+          set_cache: id
+  assert:
+    # 断言接口状态码
+    errorCode:
+      jsonpath: $.code
+      type: ==
+      value: 200
+      AssertType:
+    message:
+      jsonpath: $.message
+      type: ==
+      value: '操作成功'
+      AssertType:
+
+  sql:
+  teardown_sql:
+    - delete  from `smart_parking_test2_4`.`operation_strategy` WHERE policy_name = 'pytest特殊策略'
+
+del_specialstratgey:
+  host: ${{host()}}
+  url: /show-parking/operation/strategy/del
+  method: POST
+  detail: 删除策略-pytest测试
+  headers:
+    Content-Type: application/json
+    # 这里cookie的值，写的是存入缓存的名称
+    Authorization: Bearer $cache{token}
+  # 请求的数据，是 params 还是 json、或者file、data
+  requestType: json
+  # 是否执行，空或者 true 都会执行
+  is_run:
+  data:
+
+   ['$cache{id}']
+
+
+
+  dependence_case: True
+  # 依赖的数据
+  dependence_case_data:
+    - case_id: status_down
+      dependent_data:
+        - dependent_type: request
+          jsonpath: $.id
+          set_cache: id
+  assert:
+    # 断言接口状态码
+    errorCode:
+      jsonpath: $.code
+      type: ==
+      value: 200
+      AssertType:
+    message:
+      jsonpath: $.message
+      type: ==
+      value: '操作成功'
+      AssertType:
+
+  sql:
+  teardown_sql:
+    - delete  from `smart_parking_test2_4`.`operation_strategy` WHERE policy_name = 'pytest特殊策略'
+#
+#
+edit_specialstratgey:
+  host: ${{host()}}
+  url: /show-parking/operation/strategy/update
+  method: POST
+  detail: 编辑特殊策略
+  headers:
+    Content-Type: application/json
+    # 这里cookie的值，写的是存入缓存的名称
+    Authorization: Bearer $cache{token}
+  # 请求的数据，是 params 还是 json、或者file、data
+  requestType: json
+  # 是否执行，空或者 true 都会执行
+  is_run:
+  data:
+    {"id":"$cache{id}","policyName":"$cache{name}","remark":"1","strategyRegionList":[{"regionType":1,"regionId":8}],"status":0,"startTime":"2023-06-30 00:00:00","endTime":"2023-07-01 23:59:59"}
+
+
+
+  dependence_case: True
+  # 依赖的数据
+  dependence_case_data:
+    - case_id: select_specialstratgey
+      dependent_data:
+        - dependent_type: response
+          jsonpath: $.data.records[0].policyName
+          set_cache: name
+        - dependent_type: response
+          jsonpath: $.data.records[0].id
+          set_cache: id
+  assert:
+    # 断言接口状态码
+    errorCode:
+      jsonpath: $.code
+      type: ==
+      value: 200
+      AssertType:
+    message:
+      jsonpath: $.message
+      type: ==
+      value: '操作成功'
+      AssertType:
+
+  sql:
+  teardown_sql:
+    - delete  from `smart_parking_test2_4`.`operation_strategy` WHERE policy_name = 'pytest特殊策略'
+#
+details_specialstratgey:
+  host: ${{host()}}
+  url: /show-parking/operation/strategy/detail?id=$cache{id}
+  method: GET
+  detail: 查看特殊策略详情
+  headers:
+    Content-Type: application/json
+    # 这里cookie的值，写的是存入缓存的名称
+    Authorization: Bearer $cache{token}
+  # 请求的数据，是 params 还是 json、或者file、data
+  requestType: json
+  # 是否执行，空或者 true 都会执行
+  is_run:
+  data:
+
+
+
+  dependence_case: True
+  # 依赖的数据
+  dependence_case_data:
+    - case_id: select_specialstratgey
+      dependent_data:
+        - dependent_type: response
+          jsonpath: $.data.records[0].id
+          set_cache: id
+  assert:
+    # 断言接口状态码
+    errorCode:
+      jsonpath: $.code
+      type: ==
+      value: 200
+      AssertType:
+    message:
+      jsonpath: $.message
+      type: ==
+      value: '操作成功'
+      AssertType:
+
+  sql:
+  teardown_sql:
+    - delete  from `smart_parking_test2_4`.`operation_strategy` WHERE policy_name = 'pytest特殊策略'
+#
+#
+resting_specialstratgey:
+  host: ${{host()}}
+  url: /show-parking/operation/strategy/page?policyName=&pageNumber=1&pageSize=10
+  method: GET
+  detail: 重置特殊策略
+  headers:
+    Content-Type: application/json
+    # 这里cookie的值，写的是存入缓存的名称
+    Authorization: Bearer $cache{token}
+  # 请求的数据，是 params 还是 json、或者file、data
+  requestType: json
+  # 是否执行，空或者 true 都会执行
+  is_run:
+  data:
+
+
+
+  dependence_case: False
+  # 依赖的数据
+  dependence_case_data:
+    - case_id: add_chargepackee
+      dependent_data:
+        - dependent_type: request
+          jsonpath: $.name
+          set_cache: name
+  assert:
+    # 断言接口状态码
+    errorCode:
+      jsonpath: $.code
+      type: ==
+      value: 200
+      AssertType:
+    message:
+      jsonpath: $.message
+      type: ==
+      value: '操作成功'
+      AssertType:
+
+  sql:
+  teardown_sql:
+#    - delete  from `smart_parking_test2_4`.`fee_rule` WHERE name = '计费规则pytest-时长'
+#
+#
+alldel_specialstratgey:
+    host: ${{host()}}
+    url: /show-parking/operation/strategy/del
+    method: POST
+    detail: 批量删除策略-pytest测试
+    headers:
+      Content-Type: application/json
+      # 这里cookie的值，写的是存入缓存的名称
+      Authorization: Bearer $cache{token}
+    # 请求的数据，是 params 还是 json、或者file、data
+    requestType: json
+    # 是否执行，空或者 true 都会执行
+    is_run:
+    data:
+
+      [ '$cache{id}' ]
+
+
+
+    dependence_case: True
+    # 依赖的数据
+    dependence_case_data:
+      - case_id: status_down
+        dependent_data:
+          - dependent_type: request
+            jsonpath: $.id
+            set_cache: id
+    assert:
+      # 断言接口状态码
+      errorCode:
+        jsonpath: $.code
+        type: ==
+        value: 200
+        AssertType:
+      message:
+        jsonpath: $.message
+        type: ==
+        value: '操作成功'
+        AssertType:
+
+    sql:
+    teardown_sql:
+      - delete  from `smart_parking_test2_4`.`operation_strategy` WHERE policy_name = 'pytest特殊策略'

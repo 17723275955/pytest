@@ -1,0 +1,362 @@
+case_common:
+  allureEpic: 停车接口
+  allureFeature: 运营管理模块
+  allureStory: 特殊车辆管理
+
+
+
+
+add_specialvehicle_common:
+  host: ${{host()}}
+  url: /show-parking/roster/add
+  method: POST
+  detail: 新增特殊车辆-普通车辆
+  headers:
+    Content-Type: application/json
+    # 这里cookie的值，写的是存入缓存的名称
+    Authorization: Bearer $cache{token}
+  # 请求的数据，是 params 还是 json、或者file、data
+  requestType: json
+  # 是否执行，空或者 true 都会执行
+  is_run:
+  data:
+    {"id":null,"plateNumberType":"common","plateNumber":"浙Q10123","memberName":"黄宇","phone":"17723275955","parkingLotList":[{"parkingId":330863074,"parkingType":"parkinglot"},{"parkingId":8,"parkingType":"parkingstreet"}],"beginTime":"2023-07-01 00:00:00","endTime":"2023-07-05 23:59:59","rosterType":"white"}
+
+
+  dependence_case: False
+  # 依赖的数据
+  dependence_case_data:
+  assert:
+    # 断言接口状态码
+    errorCode:
+      jsonpath: $.code
+      type: ==
+      value: 200
+      AssertType:
+    message:
+      jsonpath: $.message
+      type: ==
+      value: '操作成功'
+      AssertType:
+
+  sql:
+  teardown_sql:
+    - delete  from `smart_parking_test2_4`.`roster_white` WHERE plate_number = '浙Q10123'
+
+
+select_specialvehicle_common:
+  host: ${{host()}}
+  url: /show-parking/roster/pageList?pageNumber=1&pageSize=10&memberName=$cache{memberName}&plateNumber=$cache{plateNumber}&parkingName=&type=&rosterType=$cache{rosterType}
+  method: GET
+  detail: 查询特殊车辆
+  headers:
+    Content-Type: application/json
+    # 这里cookie的值，写的是存入缓存的名称
+    Authorization: Bearer $cache{token}
+  # 请求的数据，是 params 还是 json、或者file、data
+  requestType: json
+  # 是否执行，空或者 true 都会执行
+  is_run:
+  data:
+
+
+
+  dependence_case: True
+  # 依赖的数据
+  dependence_case_data:
+    - case_id: add_specialvehicle_common
+      dependent_data:
+        - dependent_type: request
+          jsonpath: $.plateNumber
+          set_cache: plateNumber
+        - dependent_type: request
+          jsonpath: $.memberName
+          set_cache: memberName
+        - dependent_type: request
+          jsonpath: $.rosterType
+          set_cache: rosterType
+        - dependent_type: request
+          jsonpath: $.parkingLotList[0].parkingType
+          set_cache: parkingType
+  assert:
+    # 断言接口状态码
+    errorCode:
+      jsonpath: $.code
+      type: ==
+      value: 200
+      AssertType:
+    message:
+      jsonpath: $.message
+      type: ==
+      value: '操作成功'
+      AssertType:
+
+  sql:
+  teardown_sql:
+    - delete  from `smart_parking_test2_4`.`roster_white` WHERE plate_number = '浙Q10123'
+#
+#
+#
+del_specialvehicle_common:
+  host: ${{host()}}
+  url: /show-parking/roster/delete
+  method: DELETE
+  detail: 删除特殊车辆
+  headers:
+    Content-Type: application/json
+    # 这里cookie的值，写的是存入缓存的名称
+    Authorization: Bearer $cache{token}
+  # 请求的数据，是 params 还是 json、或者file、data
+  requestType: json
+  # 是否执行，空或者 true 都会执行
+  is_run:
+  data:
+    "idList": ['$cache{id}']
+
+
+
+  dependence_case: True
+  # 依赖的数据
+  dependence_case_data:
+    - case_id: select_specialvehicle_common
+      dependent_data:
+        - dependent_type: response
+          jsonpath: $.data.records[0].id
+          set_cache: id
+  assert:
+    # 断言接口状态码
+    errorCode:
+      jsonpath: $.code
+      type: ==
+      value: 200
+      AssertType:
+    message:
+      jsonpath: $.message
+      type: ==
+      value: '操作成功'
+      AssertType:
+
+  sql:
+  teardown_sql:
+    - delete  from `smart_parking_test2_4`.`roster_white` WHERE plate_number = '浙Q10123'
+#
+details_specialvehicle_common:
+  host: ${{host()}}
+  url: /show-parking/roster/detail?id=$cache{id}
+  method: GET
+  detail: 查看特殊车辆详情
+  headers:
+    Content-Type: application/json
+    # 这里cookie的值，写的是存入缓存的名称
+    Authorization: Bearer $cache{token}
+  # 请求的数据，是 params 还是 json、或者file、data
+  requestType: json
+  # 是否执行，空或者 true 都会执行
+  is_run:
+  data:
+
+
+
+  dependence_case: True
+  # 依赖的数据
+  dependence_case_data:
+    - case_id: select_specialvehicle_common
+      dependent_data:
+        - dependent_type: response
+          jsonpath: $.data.records[0].id
+          set_cache: id
+  assert:
+    # 断言接口状态码
+    errorCode:
+      jsonpath: $.code
+      type: ==
+      value: 200
+      AssertType:
+    message:
+      jsonpath: $.message
+      type: ==
+      value: '操作成功'
+      AssertType:
+
+  sql:
+  teardown_sql:
+    - delete  from `smart_parking_test2_4`.`roster_white` WHERE plate_number = '浙Q10123'
+#
+##
+resting_specialvehicle_common:
+  host: ${{host()}}
+  url: /show-parking/roster/pageList?pageNumber=1&pageSize=10&memberName=&plateNumber=&parkingName=&type=&rosterType=
+  method: GET
+  detail: 重置特殊车辆
+  headers:
+    Content-Type: application/json
+    # 这里cookie的值，写的是存入缓存的名称
+    Authorization: Bearer $cache{token}
+  # 请求的数据，是 params 还是 json、或者file、data
+  requestType: json
+  # 是否执行，空或者 true 都会执行
+  is_run:
+  data:
+
+
+
+  dependence_case: False
+  # 依赖的数据
+  dependence_case_data:
+    - case_id: add_chargepackee
+      dependent_data:
+        - dependent_type: request
+          jsonpath: $.name
+          set_cache: name
+  assert:
+    # 断言接口状态码
+    errorCode:
+      jsonpath: $.code
+      type: ==
+      value: 200
+      AssertType:
+    message:
+      jsonpath: $.message
+      type: ==
+      value: '操作成功'
+      AssertType:
+
+  sql:
+  teardown_sql:
+    - delete  from `smart_parking_test2_4`.`roster_white` WHERE plate_number = '浙Q10123'
+##
+##
+alldel_specialvehicle_common:
+    host: ${{host()}}
+    url: /show-parking/roster/delete
+    method: DELETE
+    detail: 批量删除特殊车辆
+    headers:
+      Content-Type: application/json
+      # 这里cookie的值，写的是存入缓存的名称
+      Authorization: Bearer $cache{token}
+    # 请求的数据，是 params 还是 json、或者file、data
+    requestType: json
+    # 是否执行，空或者 true 都会执行
+    is_run:
+    data:
+      "idList": ['$cache{id}','$cache{idd}']
+
+
+
+    dependence_case: True
+    # 依赖的数据
+    dependence_case_data:
+      - case_id: select_specialvehicle_common
+        dependent_data:
+          - dependent_type: response
+            jsonpath: $.data.records[0].id
+            set_cache: id
+          - dependent_type: response
+            jsonpath: $.data.records[1].id
+            set_cache: idd
+    assert:
+      # 断言接口状态码
+      errorCode:
+        jsonpath: $.code
+        type: ==
+        value: 200
+        AssertType:
+      message:
+        jsonpath: $.message
+        type: ==
+        value: '操作成功'
+        AssertType:
+
+    sql:
+    teardown_sql:
+      - delete  from `smart_parking_test2_4`.`roster_white` WHERE plate_number = '浙Q10123'
+
+
+templateDownload:
+  host: ${{host()}}
+  url: /show-parking/roster/importTemplate
+  method: GET
+  detail: 导入模板下载
+  headers:
+    Content-Type: application/json
+    # 这里cookie的值，写的是存入缓存的名称
+    Authorization: Bearer $cache{token}
+  # 请求的数据，是 params 还是 json、或者file、data
+  requestType: json
+  # 是否执行，空或者 true 都会执行
+  is_run:
+  data:
+
+
+
+
+  dependence_case: False
+  # 依赖的数据
+  dependence_case_data:
+    - case_id: select_specialvehicle_common
+      dependent_data:
+        - dependent_type: response
+          jsonpath: $.data.records[0].id
+          set_cache: id
+        - dependent_type: response
+          jsonpath: $.data.records[1].id
+          set_cache: idd
+  assert:
+    # 断言接口状态码
+    status_code: 200
+
+  sql:
+  teardown_sql:
+#    - delete  from `smart_parking_test2_4`.`roster_white` WHERE plate_number = '浙Q10123'
+
+
+
+BatchImport:
+  host: ${{host()}}
+  url: /show-parking/roster/importExcel
+  method: POST
+  detail: 批量导入
+  headers:
+    Content-Type: application/json
+    # 这里cookie的值，写的是存入缓存的名称
+    Authorization: Bearer $cache{token}
+  # 请求的数据，是 params 还是 json、或者file、data
+  requestType: file
+  # 是否执行，空或者 true 都会执行
+  is_run:
+  data:
+    file:
+      file: 特殊车辆导入模板.xlsx
+
+
+
+
+  dependence_case: False
+  # 依赖的数据
+  dependence_case_data:
+    - case_id: self
+      dependent_data:
+        - dependent_type: sqlData
+          jsonpath: $.phone
+          set_cache: phone
+
+  assert:
+    # 断言接口状态码
+    errorCode:
+      jsonpath: $.code
+      type: ==
+      value: 200
+      AssertType:
+    phone:
+      jsonpath: $.code
+      type: not_eq
+      value: $.phone
+      AssertType: SQL
+
+  sql:
+    - select phone from `smart_parking_test2_4`.`roster_white` WHERE parking_id='330863074'  limit 0,1
+#  setup_sql:
+#    - select phone from `smart_parking_test2_4`.`roster_white` WHERE parking_id='330863074'  limit 0,1
+  teardown_sql:
+    - delete  from `smart_parking_test2_4`.`roster_white` WHERE phone = '18112341262'

@@ -10,6 +10,7 @@ import smtplib
 from email.mime.text import MIMEText
 from utils.other_tools.allure_data.allure_report_data import TestMetrics, AllureFileClean
 from utils import config
+import ssl
 
 
 class SendEmail:
@@ -28,8 +29,9 @@ class SendEmail:
         @param content: 发送内容
         @return:
         """
-        user = "黄宇" + "<" + config.email.send_user + ">"
-        message = MIMEText(content, _subtype='plain', _charset='utf-8')
+        # "黄宇" + "<" + config.email.send_user + ">"
+        user = config.email.send_user
+        message = MIMEText(content, _subtype='plain', _charset='UTF-8')
         message['Subject'] = sub
         message['From'] = user
         message['To'] = ";".join(user_list)
@@ -74,7 +76,7 @@ class SendEmail:
         {self.allure_data.get_failed_cases_detail()}
 
         **********************************
-        jenkins地址：https://121.xx.xx.47:8989/login
+        jenkins地址：http://activate.navicat.com:9999/index.html
         详细情况可登录jenkins平台查看，非相关负责人员可忽略此消息。谢谢。
         """
         self.send_mail(user_list, sub, content)

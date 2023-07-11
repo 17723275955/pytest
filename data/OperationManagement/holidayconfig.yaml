@@ -1,0 +1,85 @@
+case_common:
+  allureEpic: 停车接口
+  allureFeature: 运营管理模块
+  allureStory: 节假日配置
+
+
+
+
+add_holiday:
+  host: ${{host()}}
+  url: /show-parking/holiday/add/batch
+  method: POST
+  detail: 新增节假日配置
+  headers:
+    Content-Type: application/json
+    # 这里cookie的值，写的是存入缓存的名称
+    Authorization: Bearer $cache{token}
+  # 请求的数据，是 params 还是 json、或者file、data
+  requestType: json
+  # 是否执行，空或者 true 都会执行
+  is_run:
+  data:
+    {"monthStr":"06","yearStr":"2023","list":["2023-06-02"]}
+
+
+  dependence_case: False
+  # 依赖的数据
+  dependence_case_data:
+  assert:
+    # 断言接口状态码
+    errorCode:
+      jsonpath: $.code
+      type: ==
+      value: 200
+      AssertType:
+    message:
+      jsonpath: $.message
+      type: ==
+      value: '操作成功'
+      AssertType:
+
+  sql:
+  teardown_sql:
+#    - delete  from `smart_parking_test2_4`.`fee_package_base` WHERE name = 'pytest测试计费包'
+#    - delete  from `smart_parking_test2_4`.`fee_package_parking` WHERE parking_id = '415258348'
+
+
+
+del_holiday:
+  host: ${{host()}}
+  url: /show-parking/holiday/delete/batch
+  method: POST
+  detail: 删除节假日配置
+  headers:
+    Content-Type: application/json
+    # 这里cookie的值，写的是存入缓存的名称
+    Authorization: Bearer $cache{token}
+  # 请求的数据，是 params 还是 json、或者file、data
+  requestType: json
+  # 是否执行，空或者 true 都会执行
+  is_run:
+  data:
+    {"monthStr":"06","yearStr":"2023","list":["2023-06-02"]}
+
+
+  dependence_case: False
+  # 依赖的数据
+  dependence_case_data:
+  assert:
+    # 断言接口状态码
+    errorCode:
+      jsonpath: $.code
+      type: ==
+      value: 200
+      AssertType:
+    message:
+      jsonpath: $.message
+      type: ==
+      value: '操作成功'
+      AssertType:
+
+  sql:
+  teardown_sql:
+#    - delete  from `smart_parking_test2_4`.`fee_package_base` WHERE name = 'pytest测试计费包'
+#    - delete  from `smart_parking_test2_4`.`fee_package_parking` WHERE parking_id = '415258348'

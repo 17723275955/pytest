@@ -1,0 +1,385 @@
+case_common:
+  allureEpic: 停车接口
+  allureFeature: 运营管理模块
+  allureStory: 计费规则管理
+
+
+
+
+add_chargerule_sd:
+  host: ${{host()}}
+  url: /show-parking/fee/rule/add
+  method: POST
+  detail: 新增计费规则-时段
+  headers:
+    Content-Type: application/json
+    # 这里cookie的值，写的是存入缓存的名称
+    Authorization: Bearer $cache{token}
+  # 请求的数据，是 params 还是 json、或者file、data
+  requestType: json
+  # 是否执行，空或者 true 都会执行
+  is_run:
+  data:
+    {"name":"计费规则pytest-时段","ruleType":"temp","status":1,"energyDiscount":10,"holidayIsFree":1,"freeTime":10,"feeType":"shiduan","shiduanBos":[{"limitDayPrice":10,"ruleDayType":"calendarDay","ruleShiduanList":[{"beginTime":"00:00:00","endTime":"23:59:59","startMinute":"10","startPrice":2,"overMinute":10,"addPrice":0,"ruleCountType":"natureDay"}]}]}
+
+
+  dependence_case: False
+  # 依赖的数据
+  dependence_case_data:
+  assert:
+    # 断言接口状态码
+    errorCode:
+      jsonpath: $.code
+      type: ==
+      value: 200
+      AssertType:
+    message:
+      jsonpath: $.message
+      type: ==
+      value: '操作成功'
+      AssertType:
+
+  sql:
+  teardown_sql:
+    - delete  from `smart_parking_test2_4`.`fee_rule` WHERE name = '计费规则pytest-时段'
+
+
+
+add_chargerule_fs:
+  host: ${{host()}}
+  url: /show-parking/fee/rule/add
+  method: POST
+  detail: 新增计费规则-分时
+  headers:
+    Content-Type: application/json
+    # 这里cookie的值，写的是存入缓存的名称
+    Authorization: Bearer $cache{token}
+  # 请求的数据，是 params 还是 json、或者file、data
+  requestType: json
+  # 是否执行，空或者 true 都会执行
+  is_run:
+  data:
+    {"name":"计费规则pytest-分时","ruleType":"temp","status":1,"energyDiscount":1,"holidayIsFree":1,"freeTime":10,"feeType":"fenshi","ruleFenshiList":[{"ruleDayType":"workDay","price":1,"beginHour":0,"endHour":24}]}
+
+
+  dependence_case: False
+  # 依赖的数据
+  dependence_case_data:
+  assert:
+    # 断言接口状态码
+    errorCode:
+      jsonpath: $.code
+      type: ==
+      value: 200
+      AssertType:
+    message:
+      jsonpath: $.message
+      type: ==
+      value: '操作成功'
+      AssertType:
+
+  sql:
+  teardown_sql:
+    - delete  from `smart_parking_test2_4`.`fee_rule` WHERE name = '计费规则pytest-分时'
+
+
+add_chargerule_sc:
+  host: ${{host()}}
+  url: /show-parking/fee/rule/add
+  method: POST
+  detail: 新增计费规则-时长
+  headers:
+    Content-Type: application/json
+    # 这里cookie的值，写的是存入缓存的名称
+    Authorization: Bearer $cache{token}
+  # 请求的数据，是 params 还是 json、或者file、data
+  requestType: json
+  # 是否执行，空或者 true 都会执行
+  is_run:
+  data:
+    {"name":"计费规则pytest-时长","ruleType":"temp","status":1,"energyDiscount":10,"holidayIsFree":1,"freeTime":10,"feeType":"shichang","ruleShichangList":[{"ruleDayType":"calendarDay","startMinute":"10","startPrice":10,"overMinute":1,"addPrice":10,"limitDayPrice":999.99,"ruleCountType":"natureDay"}]}
+
+
+  dependence_case: False
+  # 依赖的数据
+  dependence_case_data:
+  assert:
+    # 断言接口状态码
+    errorCode:
+      jsonpath: $.code
+      type: ==
+      value: 200
+      AssertType:
+    message:
+      jsonpath: $.message
+      type: ==
+      value: '操作成功'
+      AssertType:
+
+  sql:
+  teardown_sql:
+    - delete  from `smart_parking_test2_4`.`fee_rule` WHERE name = '计费规则pytest-时长'
+
+
+select_chargerule:
+  host: ${{host()}}
+  url: /show-parking/fee/rule/pageList?name=$cache{name}&pageNumber=1&pageSize=10
+  method: GET
+  detail: 查询计费规则
+  headers:
+    Content-Type: application/json
+    # 这里cookie的值，写的是存入缓存的名称
+    Authorization: Bearer $cache{token}
+  # 请求的数据，是 params 还是 json、或者file、data
+  requestType: json
+  # 是否执行，空或者 true 都会执行
+  is_run:
+  data:
+
+
+
+  dependence_case: True
+  # 依赖的数据
+  dependence_case_data:
+      - case_id: add_chargerule_sc
+        dependent_data:
+          - dependent_type: request
+            jsonpath: $.name
+            set_cache: name
+  assert:
+    # 断言接口状态码
+    errorCode:
+      jsonpath: $.code
+      type: ==
+      value: 200
+      AssertType:
+    name:
+      jsonpath: $.data.records[0].name
+      type: ==
+      value: 计费规则pytest-时长
+      AssertType:
+    message:
+      jsonpath: $.message
+      type: ==
+      value: '操作成功'
+      AssertType:
+
+  sql:
+  teardown_sql:
+    - delete  from `smart_parking_test2_4`.`fee_rule` WHERE name = '计费规则pytest-时长'
+
+
+del_chargerule:
+  host: ${{host()}}
+  url: /show-parking/fee/rule/delete
+  method: DELETE
+  detail: 删除计费规则
+  headers:
+    Content-Type: application/json
+    # 这里cookie的值，写的是存入缓存的名称
+    Authorization: Bearer $cache{token}
+  # 请求的数据，是 params 还是 json、或者file、data
+  requestType: json
+  # 是否执行，空或者 true 都会执行
+  is_run:
+  data:
+    "idList": ['$cache{id}']
+
+
+  dependence_case: True
+  # 依赖的数据
+  dependence_case_data:
+    - case_id: select_chargerule
+      dependent_data:
+        - dependent_type: response
+          jsonpath: $.data.records[0].id
+          set_cache: id
+  assert:
+    # 断言接口状态码
+    errorCode:
+      jsonpath: $.code
+      type: ==
+      value: 200
+      AssertType:
+    message:
+      jsonpath: $.message
+      type: ==
+      value: '操作成功'
+      AssertType:
+
+  sql:
+  teardown_sql:
+    - delete  from `smart_parking_test2_4`.`fee_rule` WHERE name = '计费规则pytest-时长'
+
+edit_chargerule:
+  host: ${{host()}}
+  url: /show-parking/fee/rule/update
+  method: PUT
+  detail: 编辑计费规则
+  headers:
+    Content-Type: application/json
+    # 这里cookie的值，写的是存入缓存的名称
+    Authorization: Bearer $cache{token}
+  # 请求的数据，是 params 还是 json、或者file、data
+  requestType: json
+  # 是否执行，空或者 true 都会执行
+  is_run:
+  data:
+    {"id":'$cache{id}',"name":'$cache{name}',"energyDiscount":100,"ruleType":"temp","status":1,"holidayIsFree":0,"freeTime":0,"feeType":"shichang","ruleShichangList":[{"id":213,"ruleId":'$cache{id}',"startMinute":1,"startPrice":0.01,"overMinute":1,"addPrice":0.01,"limitDayPrice":0.05,"ruleDayType":"calendarDay","ruleCountType":"natureDay","deleted":false}]}
+
+
+  dependence_case: True
+  # 依赖的数据
+  dependence_case_data:
+    - case_id: select_chargerule
+      dependent_data:
+        - dependent_type: response
+          jsonpath: $.data.records[0].name
+          set_cache: name
+        - dependent_type: response
+          jsonpath: $.data.records[0].id
+          set_cache: id
+  assert:
+    # 断言接口状态码
+    errorCode:
+      jsonpath: $.code
+      type: ==
+      value: 200
+      AssertType:
+    message:
+      jsonpath: $.message
+      type: ==
+      value: '操作成功'
+      AssertType:
+
+  sql:
+  teardown_sql:
+    - delete  from `smart_parking_test2_4`.`fee_rule` WHERE name = '计费规则pytest-时长'
+
+details_chargerule:
+  host: ${{host()}}
+  url: /show-parking/fee/rule/detail?id=$cache{id}
+  method: GET
+  detail: 查看计费规则详情
+  headers:
+    Content-Type: application/json
+    # 这里cookie的值，写的是存入缓存的名称
+    Authorization: Bearer $cache{token}
+  # 请求的数据，是 params 还是 json、或者file、data
+  requestType: json
+  # 是否执行，空或者 true 都会执行
+  is_run:
+  data:
+
+
+
+  dependence_case: True
+  # 依赖的数据
+  dependence_case_data:
+    - case_id: select_chargerule
+      dependent_data:
+        - dependent_type: response
+          jsonpath: $.data.records[0].id
+          set_cache: id
+  assert:
+    # 断言接口状态码
+    errorCode:
+      jsonpath: $.code
+      type: ==
+      value: 200
+      AssertType:
+    message:
+      jsonpath: $.message
+      type: ==
+      value: '操作成功'
+      AssertType:
+
+  sql:
+  teardown_sql:
+    - delete  from `smart_parking_test2_4`.`fee_rule` WHERE name = '计费规则pytest-时长'
+
+
+
+resting_chargerule:
+  host: ${{host()}}
+  url: /show-parking/fee/rule/pageList?name=&pageNumber=1&pageSize=10
+  method: GET
+  detail: 重置计费规则
+  headers:
+    Content-Type: application/json
+    # 这里cookie的值，写的是存入缓存的名称
+    Authorization: Bearer $cache{token}
+  # 请求的数据，是 params 还是 json、或者file、data
+  requestType: json
+  # 是否执行，空或者 true 都会执行
+  is_run:
+  data:
+
+
+
+  dependence_case: False
+  # 依赖的数据
+  dependence_case_data:
+    - case_id: add_chargerule_sc
+      dependent_data:
+        - dependent_type: request
+          jsonpath: $.name
+          set_cache: name
+  assert:
+    # 断言接口状态码
+    errorCode:
+      jsonpath: $.code
+      type: ==
+      value: 200
+      AssertType:
+    message:
+      jsonpath: $.message
+      type: ==
+      value: '操作成功'
+      AssertType:
+
+  sql:
+  teardown_sql:
+    - delete  from `smart_parking_test2_4`.`fee_rule` WHERE name = '计费规则pytest-时长'
+
+alldel_chargerule:
+  host: ${{host()}}
+  url: /show-parking/fee/rule/delete
+  method: DELETE
+  detail: 批量删除计费规则
+  headers:
+    Content-Type: application/json
+    # 这里cookie的值，写的是存入缓存的名称
+    Authorization: Bearer $cache{token}
+  # 请求的数据，是 params 还是 json、或者file、data
+  requestType: json
+  # 是否执行，空或者 true 都会执行
+  is_run:
+  data:
+    "idList": ['$cache{id}']
+
+
+  dependence_case: True
+  # 依赖的数据
+  dependence_case_data:
+    - case_id: select_chargerule
+      dependent_data:
+        - dependent_type: response
+          jsonpath: $.data.records[0].id
+          set_cache: id
+  assert:
+    # 断言接口状态码
+    errorCode:
+      jsonpath: $.code
+      type: ==
+      value: 200
+      AssertType:
+    message:
+      jsonpath: $.message
+      type: ==
+      value: '操作成功'
+      AssertType:
+
+  sql:
+  teardown_sql:
+    - delete  from `smart_parking_test2_4`.`fee_rule` WHERE name = '计费规则pytest-时长'

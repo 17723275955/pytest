@@ -26,8 +26,8 @@ excel_report: False
 ding_talk:
 #  webhook: https://oapi.dingtalk.com/robot/send?access_token=a59902a7e811f93ffe301d8326b07a2acc8aa2a864e7d61ee9fc076481ced2a6
 #  secret: SECdea6489dfcc3b9259da943c5ae38d3530696f2fa83ac72a9ee716e9511675b9b
-  webhook:
-  secret:
+  webhook: https://oapi.dingtalk.com/robot/send?access_token=886fc57da4e98dd22a73023a59d7cd3f135e4e894b49a766609809651fecbcc7
+  secret: SECabab4250dd12eb12602973c01c55c5a89ee2e91feacf312a06f3098db0c28fb7
 # 数据库相关配置
 mysql_db:
   # 数据库开关
@@ -53,7 +53,7 @@ email:
   send_user: '289269981@qq.com'
   email_host: smtp.qq.com
   # 自己到QQ邮箱中配置stamp_key
-  stamp_key: "tjlpwpehwkkrcagj"
+  stamp_key: "kndmicjyshbubiie"
   # 收件人改成自己的邮箱
   send_list: '289269981@qq.com'
 

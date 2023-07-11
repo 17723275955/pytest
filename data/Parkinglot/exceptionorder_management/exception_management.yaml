@@ -1,0 +1,81 @@
+case_common:
+  allureEpic: 停车接口
+  allureFeature: 异常订单管理模块
+  allureStory: 异常订单管理
+
+
+
+
+exception_search:
+    host: ${{host()}}
+    url: /show-parking/parking/order/pageList
+    method: POST
+    detail: 异常订单查询
+    headers:
+      Content-Type: application/json
+      # 这里cookie的值，写的是存入缓存的名称
+      Authorization: Bearer $cache{token}
+    # 请求的数据，是 params 还是 json、或者file、data
+    requestType: json
+    # 是否执行，空或者 true 都会执行
+    is_run:
+    data:
+      {"pageNumber":1,"pageSize":10,"parkingName":"","plateNumber":"浙Q10285","orderStatus":999,"enterBeginTime":"","enterEndTime":""}
+
+
+    dependence_case: False
+    # 依赖的数据
+    dependence_case_data:
+    assert:
+      # 断言接口状态码
+      errorCode:
+        jsonpath: $.code
+        type: ==
+        value: 200
+        AssertType:
+      message:
+        jsonpath: $.data.records[0].id
+        type: ==
+        value: 160287
+        AssertType:
+
+    sql:
+    teardown_sql:
+#      - delete  from `smart_parking_test2`.`parking_order` WHERE plate_number = '浙Q11111'
+
+
+exception_detail:
+    host: ${{host()}}
+    url: /show-parking/parking/order/detail?id=160287
+    method: GET
+    detail: 异常订单详情
+    headers:
+      Content-Type: application/json
+      # 这里cookie的值，写的是存入缓存的名称
+      Authorization: Bearer $cache{token}
+    # 请求的数据，是 params 还是 json、或者file、data
+    requestType: json
+    # 是否执行，空或者 true 都会执行
+    is_run:
+    data:
+
+
+
+    dependence_case: False
+    # 依赖的数据
+    dependence_case_data:
+    assert:
+      # 断言接口状态码
+      errorCode:
+        jsonpath: $.code
+        type: ==
+        value: 200
+        AssertType:
+      message:
+        jsonpath: $.data.id
+        type: ==
+        value: 160287
+        AssertType:
+
+    sql:
+    teardown_sql:

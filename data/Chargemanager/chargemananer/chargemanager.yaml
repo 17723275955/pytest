@@ -1,0 +1,44 @@
+case_common:
+  allureEpic: 停车接口
+  allureFeature: 智能充电桩模块
+  allureStory: 充电桩管理
+
+
+
+
+add_charge:
+    host: ${{host()}}
+    url: /show-parking/pile
+    method: POST
+    detail: 新增充电桩
+    headers:
+      Content-Type: application/json
+      # 这里cookie的值，写的是存入缓存的名称
+      Authorization: Bearer $cache{token}
+    # 请求的数据，是 params 还是 json、或者file、data
+    requestType: json
+    # 是否执行，空或者 true 都会执行
+    is_run:
+    data:
+      {"chargingPileId":null,"deviceNo":"bb123","deviceType":"2","ip":"","port":null,"producer":"","parkingId":330863074,"parkingName":"鹰潭北站公园停车场","spotId":1023}
+
+
+    dependence_case: False
+    # 依赖的数据
+    dependence_case_data:
+    assert:
+      # 断言接口状态码
+      errorCode:
+        jsonpath: $.code
+        type: ==
+        value: 200
+        AssertType:
+      message:
+        jsonpath: $.message
+        type: ==
+        value: '操作成功'
+        AssertType:
+
+    sql:
+    teardown_sql:
+      - delete  from `smart_parking_test2`.`charging_pile` WHERE device_no = 'bb123'
