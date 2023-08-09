@@ -3,9 +3,9 @@
 
 本框架主要是基于 Python + pytest + allure + log + yaml + mysql + redis + 钉钉通知 + Jenkins 实现的接口自动化框架。
 
-* git地址: [https://gitee.com/yu_xiao_qi/pytest-auto-api2](https://gitee.com/yu_xiao_qi/pytest-auto-api2)
-* 项目参与者: 余少琪
-* 技术支持邮箱: 1603453211@qq.com
+* git地址: [https://gitee.com/huangyu/pytest-auto-api2](https://gitee.com/huangyu/pytest-auto-api2)
+* 项目参与者: 黄宇
+* 技术支持邮箱: 289269981@qq.com
 * 个人博客地址:  [https://blog.csdn.net/weixin_43865008](https://blog.csdn.net/weixin_43865008)
 
 如果对您有帮助，请点亮 小星星 以表支持，谢谢
@@ -40,13 +40,15 @@
 * 支持swagger接口文档转成yaml用例，节省用例编写时间
 
 
-## 遇到问题
+[comment]: <> (## 遇到问题)
 
-* 请仔细阅读文档，文档中几乎可以帮你避免所有的问题
-* 可以添加微信： being_chaoren, 添加微信会将你拉倒自动化交流群中，群内有很多热心的小伙伴，但是前提是希望你已经阅读了文档中的所有内容
-* 你也可以请作者为你解答，当然我不是免费的
+[comment]: <> (* 请仔细阅读文档，文档中几乎可以帮你避免所有的问题)
 
-![img.png](Files/image/wechat.png)
+[comment]: <> (* 可以添加微信： being_chaoren, 添加微信会将你拉倒自动化交流群中，群内有很多热心的小伙伴，但是前提是希望你已经阅读了文档中的所有内容)
+
+[comment]: <> (* 你也可以请作者为你解答，当然我不是免费的)
+
+[comment]: <> (![img.png]&#40;Files/image/wechat.png&#41;)
 
 ## 目录结构
 
@@ -919,7 +921,4 @@ _框架内容会随着大家的反馈，持续更新！邮箱地址：1602343211
 
 ## 赞赏
 
-如果这个库有帮助到你并且你很想支持库的后续开发和维护，那么你可以扫描下方二维码随意打赏我，我将不胜感激
-
-![img_1.png](Files/image/img_1.png)  ![img_1.png](Files/image/weixin_pay.png)
 
